@@ -36,4 +36,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getJWTIdentifier(){
+        return $this->getkey();
+    }
+
+    public function getJWTCustomClaims(){
+        return [];
+    }
 }

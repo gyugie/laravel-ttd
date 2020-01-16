@@ -1,0 +1,42 @@
+<?php
+
+namespace Tests\Feature;
+
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Tests\TestCase;
+
+class AuthTest extends TestCase
+{
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function testExample()
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * test registration user
+     * 
+     * @test
+     */
+
+     public function test_register(){
+        $data = [
+            'email' => 'test@gmail.com',
+            'name' => 'Test',
+            'password' => 'secret1234',
+            'password_confirmation' => 'secret1234',
+        ];
+
+        $this->post(route('api.register'), $data)
+            ->assertStatus(500)
+            ->assertJson($data);
+
+     }
+}
