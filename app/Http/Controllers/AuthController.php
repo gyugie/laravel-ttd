@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Request\AuthRequest;
-use App\Http\Request\AuthRegister;
+use App\Http\Requests\AuthRequest;
+use App\Http\Requests\AuthRegister;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use App\User;
+use Hash;
+use JWTAuth;
+
 
 class AuthController extends Controller
 {
@@ -20,7 +24,7 @@ class AuthController extends Controller
         return response()->json(compact('token'));
     }
 
-    public function resgister(AuthRegister $request){
+    public function register(AuthRegister $request){
         $validate = $request->validated();
         $user = User::create([
             'name'      => $request->input('name'),
@@ -29,6 +33,7 @@ class AuthController extends Controller
             ]);
         
         $token = JWTAuth::fromUser($user);
-        return response()->json($token);
+
+        return response()->json(compact('token'));
     }
 }

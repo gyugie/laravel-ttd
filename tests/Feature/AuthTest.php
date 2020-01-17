@@ -2,12 +2,15 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\User;
 
 class AuthTest extends TestCase
 {
+    use RefreshDatabase, DatabaseMigrations;
     /**
      * A basic feature test example.
      *
@@ -34,9 +37,9 @@ class AuthTest extends TestCase
             'password_confirmation' => 'secret1234',
         ];
 
-        $this->post(route('api.register'), $data)
-            ->assertStatus(500)
-            ->assertJson($data);
+        $response = $this->json('POST',route('api.register'),$data)
+                    ->assertStatus(200);
+        $this->assertArrayHasKey('token',$response->json());
 
      }
 }
