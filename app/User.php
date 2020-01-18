@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-
+use App\Recipe;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
@@ -45,4 +45,9 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims(){
         return [];
     }
+
+    public function recipes(){
+        return $this->hasMany(Recipe::class,'publisher_id');
+    }
+
 }

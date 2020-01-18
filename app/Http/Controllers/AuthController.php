@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\AuthRequest;
 use App\Http\Requests\AuthRegister;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\Auth;
 use App\User;
 use Hash;
 use JWTAuth;
@@ -16,8 +17,7 @@ class AuthController extends Controller
     public function authenticate(AuthRequest $request){
         $validate       = $request->validated();
         $creadentials   = $request->only(['email','password']);
-        
-        if(! $token = auth()->attempt($creadentials)){
+        if(! $token = Auth::guard('api')->attempt($creadentials)){
             return response()->json(['error' => 'Incorect credentials'], 401);
         }
 
@@ -33,7 +33,7 @@ class AuthController extends Controller
             ]);
         
         $token = JWTAuth::fromUser($user);
-
+        
         return response()->json(compact('token'));
     }
 }

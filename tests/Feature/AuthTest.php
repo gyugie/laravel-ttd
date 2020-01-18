@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\User;
+use DB;
 
 class AuthTest extends TestCase
 {
@@ -23,6 +24,7 @@ class AuthTest extends TestCase
         $response->assertStatus(200);
     }
 
+    
     /**
      * test registration user
      * 
@@ -39,7 +41,32 @@ class AuthTest extends TestCase
 
         $response = $this->json('POST',route('api.register'),$data)
                     ->assertStatus(200);
-        $this->assertArrayHasKey('token',$response->json());
 
+                    $this->assertArrayHasKey('token',$response->json());
      }
+
+     /**
+     * test user login
+     * @test
+     */
+
+    public function user_login(){
+        User::create([
+            'name'     => 'test',
+            'email'    => 'email@gmail.com',
+            'password' => bcrypt('secret1234')
+        ]);
+
+        $response = $this->json('POST', route('api.authenticate'), [
+            'email'     => 'email@gmail.com',
+            'password'  => 'secret123'
+        ]);
+
+        $response->assertStatus(401);
+
+        $this->assertArrayHasKey('token', $response->json());
+
+    }
+
+
 }
