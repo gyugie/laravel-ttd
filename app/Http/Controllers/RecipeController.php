@@ -14,7 +14,7 @@ class RecipeController extends Controller
         $validate   = $request->validated();
         $user       = Auth::user();
         $recipe     = Recipe::create($request->only(['title','procedure']));
-        $insert     =  $user->recipes()->save($recipe);
+        $insert     = $user->recipes()->save($recipe);
         return response()->json($recipe->toArray());
     }
 }

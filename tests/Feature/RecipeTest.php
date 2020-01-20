@@ -8,6 +8,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 use App\User;
+use App\Recipe;
 use JWTAuth;
 use DB;
 
@@ -41,15 +42,14 @@ class RecipeTest extends TestCase
     public function test_create_recipe(){
         $this->withoutExceptionHandling();
         $token      = $this->authtenticate();
+        $recipe     = factory(Recipe::class)->create();
+        
         $response   = $this->withHeaders([
             'Authorization' => 'Bearer '. $token,
-        ])->json('POST', route('recipe.create'),[
-            'title'     => 'Jollo',
-            'procedure' => 'Pablo amous laba '
-        ]);
-
-        $response->assertStatus(200);
+        ])->json('POST', route('recipe.create'), $recipe->toArray());
         
+        $response->assertStatus(200);
+        $response->assertJson($response->json());
 
     }
 }
